@@ -43,13 +43,13 @@ static int tlb__lookup (unsigned int page_number, bool write)
   return -1;
 }
 
-static void tlb__push_entries()
-{
-    for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
-    {
-      tlb_entries[i] = tlb_entries[i+1];
-    }
-}
+// static void tlb__push_entries()
+// {
+//     for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
+//     {
+//       tlb_entries[i] = tlb_entries[i+1];
+//     }
+// }
 
 /*Tableau pour stocker les donnees parcourues dans le log*/
 static struct tlb_entry log_last_entries[TLB_NUM_ENTRIES-1];
@@ -117,7 +117,7 @@ static int fifo_algo(){
       }
     }
     
-    return NULL;
+    return -1;
 }
 
 
