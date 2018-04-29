@@ -43,7 +43,6 @@ static int tlb__lookup (unsigned int page_number, bool write)
   return -1;
 }
 
-<<<<<<< HEAD
 static void tlb__push_entries()
 {
     for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
@@ -51,8 +50,6 @@ static void tlb__push_entries()
       tlb_entries[i] = tlb_entries[i+1];
     }
 }
-
-=======
 
 /*Tableau pour stocker les donnees parcourues dans le log*/
 static struct tlb_entry log_last_entries[TLB_NUM_ENTRIES-1];
@@ -71,6 +68,7 @@ static struct tlb_entry parse_line(char* line){
 }
 
 static int fifo_algo();
+
 static int fifo_algo(){
 
   /*D'abord on regarde si il y a une case vide dans le tlb*/
@@ -123,20 +121,20 @@ static int fifo_algo(){
 }
 
 
->>>>>>> 22e3bac5ca7032b4c84b385d6e288ef0ba9d19fc
 /* Ajoute dans le TLB une entrée qui associe `frame_number` à
  * `page_number`.  */
 static void tlb__add_entry (unsigned int page_number,
                             unsigned int frame_number, bool readonly)
 {
-<<<<<<< HEAD
-  struct tlb_entry new_entry;
-  new_entry.page_number = page_number;
-  new_entry.frame_number = frame_number;
-  new_entry.readonly = readonly;
-  tlb__push_entries();
-  tlb_entries[0] = new_entry;
-=======
+
+
+  // struct tlb_entry new_entry;
+  // new_entry.page_number = page_number;
+  // new_entry.frame_number = frame_number;
+  // new_entry.readonly = readonly;
+  // tlb__push_entries();
+  // tlb_entries[0] = new_entry;
+
   /*Algo Fifo*/
   int new_entry = fifo_algo();
   tlb_entries[new_entry].page_number = page_number;
@@ -145,7 +143,7 @@ static void tlb__add_entry (unsigned int page_number,
   fprintf(tlb_log, 
           "Page:%d Frame:%d Action:%d \n", 
           page_number, frame_number, readonly);
->>>>>>> 22e3bac5ca7032b4c84b385d6e288ef0ba9d19fc
+
 }
 
 
