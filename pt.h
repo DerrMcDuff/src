@@ -15,7 +15,7 @@ int pt_lookup (unsigned int page_number);
  * pointe vers `frame_number`.  */
 void pt_set_entry (unsigned int page_number, unsigned int frame_number);
 
-/* Marque l'entrée de `page_number` dans la page table comme invalide.  */
+/* Marque l'entrée de `page_number' dans la page table comme invalide.  */
 void pt_unset_entry (unsigned int page_number);
 
 /* Renvoie si `page_number` est `readonly`.  */

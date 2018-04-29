@@ -42,12 +42,25 @@ static int tlb__lookup (unsigned int page_number, bool write)
   return -1;
 }
 
+static void tlb__push_entries()
+{
+    for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
+    {
+      tlb_entries[i] = tlb_entries[i+1];
+    }
+}
+
 /* Ajoute dans le TLB une entrée qui associe `frame_number` à
  * `page_number`.  */
 static void tlb__add_entry (unsigned int page_number,
                             unsigned int frame_number, bool readonly)
 {
   struct tlb_entry new_entry;
+  new_entry.page_number = page_number;
+  new_entry.frame_number = frame_number;
+  new_entry.readonly = readonly;
+  tlb__push_entries();
+  tlb_entries[0] = new_entry;
 }
 
 /******************** ¡ NE RIEN CHANGER CI-DESSOUS !  ******************/

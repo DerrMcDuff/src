@@ -40,17 +40,19 @@ static void vmm_log_command (FILE *out, const char *command,
 char vmm_read (unsigned int laddress)
 {
   char c = '!';
+
   read_count++;
-  int frame_number = tlb.tlb_lookup(laddress,0);
-  if (frame_number < 0) 
+  int frame_number = tlb_lookup(laddress,0);
+  if (frame_number < 0)
   {
-    frame_number = pt.pt_lookup(laddress);
+    frame_number = pt_lookup(laddress);
     if (frame_number < 0) 
     {
-      // pm.pm_download_page()
+      printf("hello");
+      // pm_download_page();
     }
   }
-  
+
 
   // TODO: Fournir les arguments manquants.
   vmm_log_command (stdout, "READING", laddress, 0, 0, 0, 0, c);
