@@ -47,7 +47,7 @@ static int tlb__lookup (unsigned int page_number, bool write)
 // {
 //     for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
 //     {
-//       tlb_entries[i] = tlb_entries[i+1];
+//       tlb_entries[i+1] = tlb_entries[i];
 //     }
 // }
 

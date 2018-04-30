@@ -25,11 +25,11 @@ void vmm_init (FILE *log)
 // NE PAS MODIFIER CETTE FONCTION
 static void vmm_log_command (FILE *out, const char *command,
                              unsigned int laddress, /* Logical address. */
-		             unsigned int page,
+		                         unsigned int page,
                              unsigned int frame,
                              unsigned int offset,
                              unsigned int paddress, /* Physical address.  */
-		             char c) /* Caractère lu ou écrit.  */
+		                         char c) /* Caractère lu ou écrit.  */
 {
   if (out)
     fprintf (out, "%s[%c]@%05d: p=%d, o=%d, f=%d pa=%d\n", command, c, laddress,
