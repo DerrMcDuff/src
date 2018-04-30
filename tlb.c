@@ -37,12 +37,15 @@ static int tlb__lookup (unsigned int page_number, bool write)
 {
   for (int i = 0; i < TLB_NUM_ENTRIES; i++) {
     if (tlb_entries[i].page_number == page_number) {
+      tlb_hit_count = tlb_hit_count + 1;
       return tlb_entries[i].frame_number;
     }
   }
+  tlb_miss_count = tlb_miss_count + 1;
   return -1;
 }
 
+<<<<<<< HEAD
 // static void tlb__push_entries()
 // {
 //     for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
@@ -65,60 +68,18 @@ static struct tlb_entry parse_line(char* line){
   t.page_number = page_number;
   t.frame_number = frame_number;
   return t;
+=======
+static void tlb__push_entries()
+{
+  for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
+  {
+    tlb_entries[i+1] = tlb_entries[i];
+  }
+>>>>>>> 1ace24595ea7f0b085c240fe96c78c15de5ed465
 }
 
-static int fifo_algo();
-
-static int fifo_algo(){
-
-  /*D'abord on regarde si il y a une case vide dans le tlb*/
-    for (int i = 0; i < TLB_NUM_ENTRIES; i++){
-      if(tlb_entries[i].frame_number == -1)
-        return i;
-    }
-    /*A regarder dans le log pour trouver le entry le moins utilise*/
-    
-    for (int i = 0; i < TLB_NUM_ENTRIES-1; i++)
-      log_last_entries[i].page_number = -1;
-    
-    struct tlb_entry t;
-    
-    if(tlb_log != NULL){
-      
-      /*Parcours d'une ligne a la fois dans le fichier log*/
-      char line[128];
-      while (fgets(line, sizeof(line), tlb_log)){
-        
-        t = parse_line(line);
-        
-        /*parcours du tableau ou on store les dernieres entry du log*/
-        for (int i=0; i < TLB_NUM_ENTRIES-1; i++){
-          
-          //verifier si la case dans le tableau contient deja cet element
-          if(log_last_entries[i].page_number == t.page_number &&
-             log_last_entries[i].frame_number == t.frame_number) {
-              goto next_line;
-          }
-          else if(log_last_entries[i].page_number == -1) {
-            log_last_entries[i] = t;
-            goto next_line;
-          }
-        }
-        
-        stop_reading: break;
-        next_line: continue;//continue serves no purpose here except aesthetics
-      }
-    }
-    
-    for (int i=0; i< TLB_NUM_ENTRIES; i++){
-      if(tlb_entries[i].page_number == t.page_number &&
-          tlb_entries[i].frame_number == t.frame_number){
-        return i;
-      }
-    }
-    
-    return -1;
-}
+/*Tableau pour stocker les donnees parcourues dans le log*/
+//static struct tlb_entry log_last_entries[TLB_NUM_ENTRIES-1];
 
 
 /* Ajoute dans le TLB une entrée qui associe `frame_number` à
@@ -128,26 +89,21 @@ static void tlb__add_entry (unsigned int page_number,
 {
 
 
-  // struct tlb_entry new_entry;
-  // new_entry.page_number = page_number;
-  // new_entry.frame_number = frame_number;
-  // new_entry.readonly = readonly;
-  // tlb__push_entries();
-  // tlb_entries[0] = new_entry;
+  struct tlb_entry new_entry;
+  new_entry.page_number = page_number;
+  new_entry.frame_number = frame_number;
+  new_entry.readonly = readonly;
+  tlb__push_entries();
+  tlb_mod_count = tlb_mod_count + 1;
+  //chaque fois qu'il y a une nouvelle entree
+  //elle est placee en avant de la liste
+  tlb_entries[0] = new_entry;
 
-  /*Algo Fifo*/
-  int new_entry = fifo_algo();
-  tlb_entries[new_entry].page_number = page_number;
-  tlb_entries[new_entry].frame_number = frame_number;
-  tlb_entries[new_entry].readonly = readonly;
   fprintf(tlb_log, 
           "Page:%d Frame:%d Action:%d \n", 
           page_number, frame_number, readonly);
 
 }
-
-
-
 
 
 /******************** ¡ NE RIEN CHANGER CI-DESSOUS !  ******************/
