@@ -25,7 +25,7 @@ void vmm_init (FILE *log)
 // NE PAS MODIFIER CETTE FONCTION
 static void vmm_log_command (FILE *out, const char *command,
                              unsigned int laddress, /* Logical address. */
-		             unsigned int page,
+            		             unsigned int page,
                              unsigned int frame,
                              unsigned int offset,
                              unsigned int paddress, /* Physical address.  */
@@ -39,23 +39,28 @@ static void vmm_log_command (FILE *out, const char *command,
 /* Effectue une lecture à l'adresse logique `laddress`.  */
 char vmm_read (unsigned int laddress)
 {
-  char c = '!';
-
+  char c = '1';
+  unsigned int page = ((ladress >> 8) & 511);    //les 8 bits les moins significatifs
+  unsigned int offset = ((ladress >> 0) & 511);  //les 8 bits les plus significatifs
+  unsigned int paddress = (page * PAGE_FRAME_SIZE) + offset;
+  
   read_count++;
-  int frame_number = tlb_lookup(laddress,0);
+  int frame_number = tlb_lookup(laddress, 0);
+
   if (frame_number < 0)
   {
+    printf("Not found in tlb");
     frame_number = pt_lookup(laddress);
+    
     if (frame_number < 0) 
     {
-      printf("hello");
-      // pm_download_page();
+      printf("Not found in page table");
+      pm_download_page();
     }
   }
 
-
   // TODO: Fournir les arguments manquants.
-  vmm_log_command (stdout, "READING", laddress, 0, 0, 0, 0, c);
+  vmm_log_command (stdout, "READING", laddress, page, frame_number, offset, paddress, c);
   return c;
 }
 
@@ -63,7 +68,7 @@ char vmm_read (unsigned int laddress)
 void vmm_write (unsigned int laddress, char c)
 {
   write_count++;
-
+  char c = '0';
   /* ¡ TODO: COMPLÉTER ! */
 
   // TODO: Fournir les arguments manquants.
