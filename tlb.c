@@ -45,41 +45,13 @@ static int tlb__lookup (unsigned int page_number, bool write)
   return -1;
 }
 
-<<<<<<< HEAD
-// static void tlb__push_entries()
-// {
-//     for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
-//     {
-//       tlb_entries[i+1] = tlb_entries[i];
-//     }
-// }
-
-/*Tableau pour stocker les donnees parcourues dans le log*/
-static struct tlb_entry log_last_entries[TLB_NUM_ENTRIES-1];
-
-static struct tlb_entry parse_line(char* line){
-  
-  int page_number, frame_number;
-  sscanf(line, "%d %d", &page_number, &frame_number);
-  
-  /*Utilisation de la structure de tlb_entry pour stocker la valeur de 
-  la page et du frame qui sont dans le log*/
-  struct tlb_entry t;
-  t.page_number = page_number;
-  t.frame_number = frame_number;
-  return t;
-=======
 static void tlb__push_entries()
 {
-  for (int i=0; i < TLB_NUM_ENTRIES-1; i++)
+  for (int i=TLB_NUM_ENTRIES-1; i >0; i--)
   {
     tlb_entries[i+1] = tlb_entries[i];
   }
->>>>>>> 1ace24595ea7f0b085c240fe96c78c15de5ed465
 }
-
-/*Tableau pour stocker les donnees parcourues dans le log*/
-//static struct tlb_entry log_last_entries[TLB_NUM_ENTRIES-1];
 
 
 /* Ajoute dans le TLB une entrée qui associe `frame_number` à

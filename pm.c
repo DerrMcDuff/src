@@ -27,7 +27,7 @@ void pm_download_page (unsigned int page_number, unsigned int frame_number)
   char buffer[PAGE_FRAME_SIZE];
   fseek(pm_backing_store, page_number*PAGE_FRAME_SIZE, SEEK_SET);
   fread(buffer, 1, PAGE_FRAME_SIZE, pm_backing_store);
-  for(int i = 0; i <PAGE_FRAME_SIZE; i++)
+  for(int i = 0; i < PAGE_FRAME_SIZE; i++)
   {
     pm_memory[frame_number*PAGE_FRAME_SIZE + i] = buffer[i];
   }
@@ -46,7 +46,11 @@ void pm_backup_page (unsigned int frame_number, unsigned int page_number)
   while ((fgetc(pm_backing_store) != EOF) && (increment<PAGE_FRAME_SIZE))
   {
     fseek(pm_backing_store, ftell(pm_backing_store) - 1, SEEK_SET);
-    fprintf(pm_backing_store, "%c", pm_memory[page_number*PAGE_FRAME_SIZE + increment]); /* write the new character at the new position */
+    
+    /* write the new character at the new position */
+    fprintf(pm_backing_store, "%c", 
+            pm_memory[page_number*PAGE_FRAME_SIZE + increment]);
+
     increment++;
   }
 }
