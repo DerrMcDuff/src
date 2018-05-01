@@ -121,7 +121,7 @@ char vmm_read (unsigned int laddress)
   update_frame_entries(frame_number);
   
   c = pm_read(paddress);
-  tlb_add_entry(page, frame_number, 0);
+  tlb_add_entry(page, frame_number, 1);
   
   vmm_log_command (stdout, "READING", laddress, page, frame_number, offset, paddress, c);
   return c;
@@ -156,7 +156,7 @@ void vmm_write (unsigned int laddress, char c)
   
   pm_write(paddress, c);
   pt_set_entry(page, frame_number);
-  tlb_add_entry(page, frame_number, 1);
+  tlb_add_entry(page, frame_number, 0);
   
   /*faire un backup de la page car c'est une ecriture*/
   pm_backup_page(frame_number, page);

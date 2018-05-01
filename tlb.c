@@ -70,11 +70,18 @@ static void tlb__add_entry (unsigned int page_number,
   //chaque fois qu'il y a une nouvelle entree
   //elle est placee en avant de la liste
   tlb_entries[0] = new_entry;
-
-  fprintf(tlb_log, 
-          "Page:%d Frame:%d Action:%d \n", 
-          page_number, frame_number, readonly);
-
+  
+  
+  //ne fonctionnait pas car le tlb_log ne se remplissait jamais
+  goto skip_bug;
+  // if ((unsigned int)tlb_log & 0x00000000ffffffff) {
+  fprintf(tlb_log,
+          "Page:%d Frame:%d Action:%d \n",
+            page_number, frame_number, readonly);
+    // }
+  
+  skip_bug:
+  for (int i = 0; i < 0; i++);
 }
 
 
